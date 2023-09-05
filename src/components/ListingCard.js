@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 
-function ListingCard({listing}) {
+function ListingCard({listing, onDelete}) {
+const [isFavorite, setIsFavorite] = useState(false)
+
+const toggleFavorite=()=>{
+  setIsFavorite(!isFavorite)
+}
+
+function handleDelete(){
+  fetch(`http://localhost:6001/listings/${listing.id}`,{
+    method: "DELETE",
+  })
+  .then((response)=>{
+    if(response.ok){
+      onDelete(listing.id)
+    }else{
+      alert("Error deleting listing")
+    }
+  })
+  .catch(error=>console.log(error))
+}
+
   return (
     <li className="card" >
       <div className="image">
@@ -8,14 +28,16 @@ function ListingCard({listing}) {
         <img src={listing.image} alt={listing.description} />
       </div>
       <div className="details">
-        {true ? (
-          <button className="emoji-button favorite active">★</button>
-        ) : (
-          <button className="emoji-button favorite">☆</button>
-        )}
+        <button
+          className={`emoji-button favorite ${isFavorite ? "active" : ""}`}
+          onClick={toggleFavorite}
+        >
+          {isFavorite ? "★" : "☆"}
+        </button>
+        
         <strong>{listing.description}</strong>
         <span> · {listing.location}</span>
-        <button className="emoji-button delete">🗑</button>
+        <button onClick={handleDelete} className="emoji-button delete">🗑</button>
       </div>
     </li>
   );
