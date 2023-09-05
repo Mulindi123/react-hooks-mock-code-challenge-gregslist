@@ -5,11 +5,12 @@ import ListingCard from "./ListingCard";
 
 function ListingsContainer({searchTerm}) {
 const [listings, setListings] =useState([])
+const [sortOrder, setSortOrder] = useState("asc")
 
 
-  const filtered = listings.filter((listing)=>
-  listing.description.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  // const filtered = listings.filter((listing)=>
+  // listing.description.toLowerCase().includes(searchTerm.toLowerCase())
+  // )
 
 function handleDeleteListing(deletedListingId){
   setListings((prevListings)=>
@@ -17,6 +18,15 @@ function handleDeleteListing(deletedListingId){
   )
 }
 
+const toggleSortOrder =()=>{
+  const newSortOrder=sortOrder==="asc"? "desc": "asc"
+  setSortOrder(newSortOrder)
+}
+
+const sortedListings=[...listings].sort((a,b)=>{
+  const compareValue= sortOrder=== "asc"? 1:-1
+  return a.location.localeCompare(b.location)*compareValue
+})
 
 
 useEffect(()=>{
@@ -27,8 +37,14 @@ useEffect(()=>{
 
   return (
     <main>
+      <button onClick={toggleSortOrder}>
+        Sort by Location {sortOrder === "asc" ? "▲" : "▼"}
+      </button>
       <ul className="cards">
-        {filtered.map((listing)=>{
+        {sortedListings
+          .filter((listing) =>
+            listing.description.toLowerCase().includes(searchTerm.toLowerCase())
+          ).map((listing)=>{
           return(
             <ListingCard listing={listing} key={listing.id} 
               onDelete={handleDeleteListing}
