@@ -1,19 +1,28 @@
 import React from "react";
 
-function Search() {
+
+function Search({searchTerm,setSearchTerm}) {
+  
+  function handleChange(e) {
+    // Update the searchTerm state with the current input value
+    setSearchTerm(e.target.value);
+  }
+
+  
   function handleSubmit(e) {
     e.preventDefault();
-    console.log("submitted");
+    // setSearchTerm(e.target.value);
   }
 
   return (
+   
     <form className="searchbar" onSubmit={handleSubmit}>
       <input
         type="text"
         id="search"
         placeholder="search free stuff"
-        value={""}
-        onChange={(e) => console.log(e.target.value)}
+        value={searchTerm}
+        onChange={handleChange}
       />
       <button type="submit">🔍</button>
     </form>

@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import ListingCard from "./ListingCard";
+import Search from "./Search";
 
-function ListingsContainer() {
+
+function ListingsContainer({searchTerm}) {
 const [listings, setListings] =useState([])
+
+
+  const filtered = listings.filter((listing)=>
+  listing.description.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
 useEffect(()=>{
   fetch("http://localhost:6001/listings")
@@ -13,9 +20,11 @@ useEffect(()=>{
   return (
     <main>
       <ul className="cards">
-        {listings.map((listing)=>{
+        {filtered.map((listing)=>{
           return(
-            <ListingCard listing={listing}/>
+            <ListingCard listing={listing} key={listing.id} 
+            
+            />
           )
         })}
       </ul>

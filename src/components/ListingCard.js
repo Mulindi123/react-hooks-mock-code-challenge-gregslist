@@ -2,7 +2,7 @@ import React from "react";
 
 function ListingCard({listing}) {
   return (
-    <li className="card">
+    <li className="card" >
       <div className="image">
         <span className="price">$0</span>
         <img src={listing.image} alt={listing.description} />
